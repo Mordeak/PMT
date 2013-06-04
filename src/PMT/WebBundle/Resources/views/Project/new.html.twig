@@ -1,0 +1,7 @@
+{% extends "PMTWebBundle:Project:layout.html.twig" %}
+
+{% block content %}
+    <form action="{{ path('project_new', {'code' : 'project'}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" value="Create" />
+{% endblock %}

@@ -25,7 +25,7 @@
                     <li><a href="{{ path('project_summary', {'code': project.code}) }}">{{ project.name }} <span class="tag project">{{ project.code }}</span></a></li>
                 {% endfor %}
                 <li class="divider"></li>
-                <li><a href="#">Create</a></li>
+                <li><a href="{{ path('project_new', {'code' : 'project'}) }}">Create</a></li>
                 <li><a href="#">Settings</a></li>
             </ul>
         </li>

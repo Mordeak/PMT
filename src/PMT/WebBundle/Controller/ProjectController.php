@@ -2,6 +2,7 @@
 
 namespace PMT\WebBundle\Controller;
 
+use PMT\CoreBundle\Entity\Project\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,6 +33,28 @@ class ProjectController extends Controller
 
 		return array(
 			'project' => $project,
+		);
+	}
+
+	/**
+	 * @Template()
+	 * @Route("/{code}/new", name="project_new")
+	 */
+	public function newAction($code)
+	{
+		$project = new Project();
+
+		$form = $this->createFormBuilder($project)
+			->add('name', 'text', array(
+				'attr' => array('class' => 'input-xxlarge')
+			))
+			->add('code', 'text')
+			->add('description', 'textarea')
+			->getForm();
+
+		return array(
+			'form' => $form->createView(),
+			'project' => $project
 		);
 	}
 
