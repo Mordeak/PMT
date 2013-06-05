@@ -45,9 +45,7 @@ class ProjectController extends Controller
 		$project = new Project();
 
 		$form = $this->createFormBuilder($project)
-			->add('name', 'text', array(
-				'attr' => array('class' => 'input-xxlarge')
-			))
+			->add('name', 'text')
 			->add('code', 'text')
 			->add('description', 'textarea')
 			->getForm();
