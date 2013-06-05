@@ -3,7 +3,7 @@
 namespace PMT\WebBundle\Controller;
 
 use PMT\CoreBundle\Entity\Issue\Issue;
-use PMT\WebBundle\Form\Type\IssueFormType;
+use PMT\WebBundle\Form\Type\IssueType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,41 +17,60 @@ class IssueController extends Controller
 	 * @Route("/issue/add", name="issue_form")
 	 */
 	public function formAction(Request $request)
-    {
-	    $issue = new Issue();
+	{
+		$issue = new Issue();
 
-	    $form = $this->createForm(new IssueFormType(), $issue);
+		$form = $this->createForm(new IssueType($this->getDoctrine()->getManager()), $issue);
 
-	    if ($request->isMethod('POST')) {
-		    $form->bind($request);
+		$form
+			->add(
+				'rebuild',
+				'checkbox',
+				array(
+					'label' => 'Create another',
+					'required' => false,
+					'property_path' => false,
+				)
+			)
+			->add(
+				'currentPath',
+				'hidden',
+				array(
+					'data' => $this->getRequest()->getPathInfo(),
+					'property_path' => false,
+				)
+			);
 
-		    if ($form->isValid()) {
-			    // perform some action, such as saving the task to the database
-			    $em = $this->getDoctrine()->getManager();
-			    $em->persist($issue);
-			    $em->flush();
-			    return $this->redirect($this->generateUrl('issue_detail', array(
-					'project_code' => $issue->getProject()->getCode(),
-					'id' => $issue->getId(),
-			    )));
-		    }
-	    }
+		if ($request->isMethod('POST')) {
+			$form->bind($request);
 
-	    $form
-		    ->add(
-			    'rebuild',
-			    'checkbox',
-			    array(
-				    'label' => 'Create another',
-				    'required' => false,
-				    "property_path" => false,
-			    )
-		    );
+			if ($form->isValid()) {
+				// perform some action, such as saving the task to the database
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($issue);
+				$em->flush();
 
-	    return array(
-		    'form' => $form->createView(),
-	    );
-    }
+				if ($form->get('rebuild')->getData()) {
+					$redirectUrl = $form->get('currentPath')->getData();
+				} else {
+					$redirectUrl = $this->generateUrl(
+						'issue_detail',
+						array(
+							'project_code' => $issue->getProject()->getCode(),
+							'id' => $issue->getId(),
+						)
+					);
+				}
+
+				return $this->redirect($redirectUrl);
+			}
+		}
+
+
+		return array(
+			'form' => $form->createView(),
+		);
+	}
 
 	/**
 	 * @Template()

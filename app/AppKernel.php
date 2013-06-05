@@ -19,10 +19,9 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-	        new PMT\CoreBundle\PMTCoreBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new PMT\CoreBundle\PMTCoreBundle(),
             new PMT\WebBundle\PMTWebBundle(),
-            new \FOS\UserBundle\FOSUserBundle(),
-            new PMT\UserBundle\PMTUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
