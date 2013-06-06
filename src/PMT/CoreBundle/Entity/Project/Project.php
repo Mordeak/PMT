@@ -62,6 +62,13 @@ class Project
 	 */
 	private $description;
 
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 *
+	 * @var int
+	 */
+	private $manager_id;
+
 	public function __construct()
 	{
 		$this->issues = new ArrayCollection();
@@ -161,5 +168,15 @@ class Project
 	public function setIssues($issues)
 	{
 		$this->issues = $issues;
+	}
+
+	public function setManagerId($manager_id)
+	{
+		$this->manager_id = $manager_id;
+	}
+
+	public function getManagerId()
+	{
+		return $this->manager_id;
 	}
 }
