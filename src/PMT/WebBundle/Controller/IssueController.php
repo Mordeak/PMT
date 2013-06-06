@@ -14,13 +14,25 @@ class IssueController extends Controller
 {
 	/**
 	 * @Template()
-	 * @Route("/issue/add", name="issue_form")
+	 * @Route("/add", defaults={"projectCode": "0"}, name="issue_form")
+	 * @Route("/{projectCode}/add", name="project_issue_form")
 	 */
-	public function formAction(Request $request)
+	public function formAction($projectCode, Request $request)
 	{
 		$issue = new Issue();
 
 		$form = $this->createForm(new IssueType($this->getDoctrine()->getManager()), $issue);
+
+		if ($projectCode) {
+			$project = $this->getDoctrine()->getRepository('PMT\CoreBundle\Entity\Project\Project')
+				->findByCode($projectCode);
+			if ($project) {
+				$form->get('project')->setData($project);
+			}
+			else {
+				return $this->redirect($this->generateUrl('issue_form'));
+			}
+		}
 
 		$form
 			->add(
@@ -29,7 +41,7 @@ class IssueController extends Controller
 				array(
 					'label' => 'Create another',
 					'required' => false,
-					'property_path' => false,
+					'mapped' => false,
 				)
 			)
 			->add(
@@ -37,7 +49,7 @@ class IssueController extends Controller
 				'hidden',
 				array(
 					'data' => $this->getRequest()->getPathInfo(),
-					'property_path' => false,
+					'mapped' => false,
 				)
 			);
 

@@ -1,12 +1,5 @@
 {% extends "PMTWebBundle::layout.html.twig" %}
 
-{% block head_additions %}
-    {{ parent() }}
-    <link href="{{ asset('bundles/pmtweb/js/select2/select2.css') }}" rel="stylesheet" />
-    <script src="{{ asset('bundles/pmtweb/js/select2/select2.min.js') }}"></script>
-
-{% endblock %}
-
 {% block content %}
 
     <div class="row">
@@ -130,7 +123,7 @@
                     <div class="form-horizontal">
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary">Save changes</button>
-                            <button type="button" class="btn">Cancel</button>
+                            <button type="button" class="btn" onclick="window.history.back();">Cancel</button>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="rebuild">
@@ -158,10 +151,12 @@
                 'tags': [],
                 query: function (query) {
                     var data = {results: []}, i, j, s;
-                    for (i = 1; i < 5; i++) {
-                        s = "";
-                        for (j = 0; j < i; j++) {s = s + query.term;}
-                        data.results.push({id: query.term, text: s});
+                    if (query.term.length) {
+                        for (i = 1; i < 5; i++) {
+                            s = "";
+                            for (j = 0; j < i; j++) {s = s + query.term;}
+                            data.results.push({id: query.term, text: s});
+                        }
                     }
                     query.callback(data);
                 },
