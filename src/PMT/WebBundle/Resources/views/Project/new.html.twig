@@ -67,6 +67,16 @@
 
                         <div id="accordion_meta" class="accordion-body collapse in">
                             <div class="accordion-inner">
+
+                                <div class="control-group">
+                                    <label class="control-label" for="description">
+                                        {{ form_label(form.managerId) }}
+                                    </label>
+                                    <div class="controls row-fluid">
+                                        {{ form_widget(form.managerId, {'attr': {'class': 'span12'}}) }}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

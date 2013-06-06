@@ -2,11 +2,14 @@
 
 namespace PMT\WebBundle\Controller;
 
+use Doctrine\ORM\EntityRepository;
 use PMT\CoreBundle\Entity\Project\Project;
+use PMT\WebBundle\Form\Type\ProjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProjectController extends Controller
 {
@@ -40,19 +43,14 @@ class ProjectController extends Controller
 	 * @Template()
 	 * @Route("/{code}/new", name="project_new")
 	 */
-	public function newAction($code)
+	public function newAction(Request $request)
 	{
 		$project = new Project();
 
-		$form = $this->createFormBuilder($project)
-			->add('name', 'text')
-			->add('code', 'text')
-			->add('description', 'textarea')
-			->getForm();
+		$form = $this->createForm(new ProjectType($this->getDoctrine()->getManager()), $project);
 
 		return array(
 			'form' => $form->createView(),
-			'project' => $project
 		);
 	}
 
